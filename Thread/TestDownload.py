@@ -8,7 +8,7 @@ img_urls = ['https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.
 
 def download_image(img_url):
     img_bytes = requests.get(img_url).content
-    img_name = img_url.split('/')[4]
+    img_name = img_url.split('/')[9]
     with open(img_name + '.jpg', 'wb') as img_file:
         img_file.write(img_bytes)
         print(f"{img_name} was downloaded")
