@@ -52,15 +52,27 @@ class MainWindow2(QMainWindow):
         err = QMessageBox()
         err.setWindowTitle("ERREUR")
         err.setText("Température non valide")
+
+        errc = QMessageBox()
+        errc.setWindowTitle("ERREUR")
+        errc.setText("Température en Kelvin en-dessous de 0")
+
+        c = float(self.__text.text())
         try:
-            float(self.__text.text())
+            c
         except:
             err.exec()
         else:
             if self.__combo.currentText() == "°C -> K":
-                self.__text2.setText(f"{float(self.__text.text()) + round(273.15, 2)}")
+                if c < -273.15:
+                    errc.exec()
+                else:
+                    self.__text2.setText(f"{c + round(273.15, 2)}")
             elif self.__combo.currentText() == "K -> °C":
-                self.__text2.setText(f"{float(self.__text.text()) - round(273.15, 2)}")
+                if c < 0:
+                    errc.exec()
+                else:
+                    self.__text2.setText(f"{c - round(273.15, 2)}")
 
     def __help(self):
         dlg = QMessageBox()
