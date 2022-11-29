@@ -7,7 +7,7 @@ def data(client_socket):
         message = input("Client : ")
         client_socket.send(message.encode())
         data = client_socket.recv(1024).decode()
-        print("Serveuur : ", data)
+        print('Serveuur : ', data)
 
 
 if __name__ == '__main__':
