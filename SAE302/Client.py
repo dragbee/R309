@@ -35,7 +35,7 @@ class server_socket():
 
 """
 def client(client_socket):
-    print('t1 start')
+    print("t1 start")
     while True:
         msgclient = input("Client : ")
         client_socket.send(msgclient.encode())

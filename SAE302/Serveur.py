@@ -15,7 +15,7 @@ def data():
         print(reply)
         conn.send(reply.encode())
         conn.send(data.encode())
-    conn.close()  # fermeture connexion serveur, client
+    conn.close()
     server_socket.close()  # fermeture serveur
 
 

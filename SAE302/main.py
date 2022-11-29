@@ -1,6 +1,6 @@
 """
 import platform
-
+""
 print(platform.uname())
 """
 from Client import server_socket
