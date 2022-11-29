@@ -1,60 +1,67 @@
-
-import threading
 import socket
-import os
+import threading
+
+class server_socket():
+
+    def __init__(self, hostname, port):
+        self.__hostname = hostname
+        self.__port = port
+        self.__socket = None
+
+    def isconnected(self):
+        return self.__socket != None
+
+    def __connect(self):
+        socket = self.__socket.socket()
+        self.__socket.connect((self.__hostname, self.__port))
+
+    def __send(self, message):
+        if self.isconnected():
+            self.__socket.send(message)
+            message = self.__socket.receive()
+            print(message)
+        print("PAS DE CONNEXIONNNNNNNNNNN")
+
+    def close(self):
+        socket.close()
+
+    def connect(self):
+        threading.Thread(target=self.__connect)
+
+    def send(self):
+        threading.Thread(target=self.__send)
 
 
-# ------------------------------------------------------
-class threadReception(threading.Thread):  # thread de reception pour chaque mySocket existante
 
-    def __init__(self, aself):
-        threading.Thread.__init__(self)
-        self.aself = aself  # héritage du self
-        self.isALive = True
+"""
+def client(client_socket):
+    print('t1 start')
+    while True:
+        msgclient = input("Client : ")
+        client_socket.send(msgclient.encode())
 
-    def run(self):
-        while self.isALive:
-            message = self.aself.mySocket.recv(1024).decode('utf8')  # on recoit les infos de cet communication
-            if not message:
-                pass
+def serv(client_socket):
+    print('t2 start')
+    while True:
+        msgserv = client_socket.recv(1024).decode()
+        print(msgserv)
 
-            else:
-                print(message)
-
-        mySocket.close()
-
-
-class client():  # classe de base, pour mika
-
-    def __init__(self, ip, port=22000):  # initialisation de l'ip, port
-        self.IP = ip
-        self.PORT = port
-        self.mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # création du socket
-
-    def start(self):  # methode a lancer pour tout initialiser
-        try:
-            self.mySocket.connect((self.IP, self.PORT))  # connexion
-            b = threadReception(self)
-            b.start()
-            return True
-        except Exception as e:
-            print(e)
-            return False
-
-    def stop(self):  # lorsqu'on étein la table, on etein le serveur
-        self.clientALive = False
-        self.mySocket.close()
-
-    def send(self, message):  # méthode pour envoyer un message à l'adresse choisie
-        try:
-            self.mySocket.send(message.encode('utf8'))  # envoi du message
-        except Exception as e:
-            print(e)
-            print('appareil faux/ pb de connexion')
+t1 = threading.Thread(target=client)
+t2 = threading.Thread(target=serv)
+t1.start()
+t2.start()
+t1.join()
+t2.join()
 
 
-while 1:
-    a = client('localhost', 8000)
-    a.start()
-    msg = input('> ')
-    a.send(msg)
+if __name__ == '__main__':
+    try:
+        client_socket = socket.socket()
+        client_socket.connect(('127.0.0.1', 8111))
+        client(client_socket)
+        serv(client_socket)
+    except ConnectionAbortedError:
+        print("Serveur déconnecté...")
+"""
+
+

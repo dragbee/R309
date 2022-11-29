@@ -7,7 +7,7 @@ def data(client_socket):
         message = input("Client : ")
         client_socket.send(message.encode())
         data = client_socket.recv(1024).decode()
-        print("Server : ", data)
+        print("Serveuur : ", data)
 
 
 if __name__ == '__main__':
@@ -18,3 +18,4 @@ if __name__ == '__main__':
         client_socket.close()
     except ConnectionAbortedError:
         print("Serveur déconnecté...")
+
