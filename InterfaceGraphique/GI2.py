@@ -48,7 +48,7 @@ class MainWindow2(QMainWindow):
             self.__labc.setText("K")
             self.__labk.setText("°C")
 
-        def __conversion(self):
+    def __conversion(self):
         err = QMessageBox()
         err.setWindowTitle("ERREUR")
         err.setText("Température non valide")

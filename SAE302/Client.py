@@ -1,6 +1,6 @@
 import socket
 import threading
-
+"""
 class server_socket():
 
     def __init__(self, hostname, port):
@@ -30,28 +30,20 @@ class server_socket():
 
     def send(self):
         threading.Thread(target=self.__send)
-
-
-
+        
+                
 """
+
+
+
 def client(client_socket):
-    print("t1 start")
-    while True:
+    msgserv = ''
+    while msgserv != "disconnect" and msgserv != "kill" and msgserv != "reset":
         msgclient = input("Client : ")
         client_socket.send(msgclient.encode())
-
-def serv(client_socket):
-    print('t2 start')
-    while True:
         msgserv = client_socket.recv(1024).decode()
         print(msgserv)
 
-t1 = threading.Thread(target=client)
-t2 = threading.Thread(target=serv)
-t1.start()
-t2.start()
-t1.join()
-t2.join()
 
 
 if __name__ == '__main__':
@@ -59,9 +51,8 @@ if __name__ == '__main__':
         client_socket = socket.socket()
         client_socket.connect(('127.0.0.1', 8111))
         client(client_socket)
-        serv(client_socket)
     except ConnectionAbortedError:
         print("Serveur déconnecté...")
-"""
+
 
 
