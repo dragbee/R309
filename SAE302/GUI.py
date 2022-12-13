@@ -1,6 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from Client import Client
+import socket
 import sys
 
 """
@@ -49,16 +50,22 @@ class TextEditDemo(QWidget):
         self.i = 0
         self.setWindowTitle("QTextEdit")
         self.resize(300, 270)
+        self.host = "127.0.0.1"
+        self.port = 8111
+        self.sock = socket.socket()
+        self.sock.connect((self.host, self.port))
+        self.connexion = Client("127.0.0.1", 8111)
 
         self.connip = QLabel("IP")
         self.ip = QLineEdit()
         self.connport = QLabel("PORT")
         self.port = QLineEdit()
         self.conn = QPushButton("Connexion")
+        self.connect = QLabel("Déconnecté")
         self.textEdit = QTextEdit()
         self.textEdit.setEnabled(False)
         self.btnPress1 = QPushButton("Add message")
-        self.text = QTextEdit()
+        self.text = QLineEdit()
         self.btnPress2 = QPushButton("Clear")
 
         layout = QGridLayout()
@@ -67,10 +74,11 @@ class TextEditDemo(QWidget):
         layout.addWidget(self.connport, 0, 2)
         layout.addWidget(self.port, 0, 3)
         layout.addWidget(self.conn, 0, 4)
-        layout.addWidget(self.textEdit, 1, 0, 1, 4)
-        layout.addWidget(self.text, 2, 0, 1, 4)
-        layout.addWidget(self.btnPress1, 3, 0)
-        layout.addWidget(self.btnPress2, 3, 1)
+        layout.addWidget(self.connect, 1, 0)
+        layout.addWidget(self.textEdit, 2, 0, 1, 4)
+        layout.addWidget(self.text, 3, 0, 1, 4)
+        layout.addWidget(self.btnPress1, 4, 0)
+        layout.addWidget(self.btnPress2, 4, 1)
 
         self.setLayout(layout)
 
@@ -79,17 +87,26 @@ class TextEditDemo(QWidget):
         self.conn.clicked.connect(self.client_connect)
 
     def btnPress1_Clicked(self):
-        self.textEdit.append(f"{self.text.toPlainText()}")
+        x = self.text.text()
+        x = str(x)
+        self.sock.send(x.encode())
+        self.textEdit.append(x)
         self.text.clear()
-#        self.textEdit.setPlainText("Hello PyQt5!\nfrom pythonpyqt.com")
 
     def btnPress2_Clicked(self):
         self.textEdit.setPlainText("")
-#        self.textEdit.setHtml("<font color='red' size='6'><red>Hello PyQt5!\nHello</font>")
 
-    def client_connect(self, host, port):
-        self.client = Client.connect
-        return (self.client())
+    def msgserv(self, conn):
+        data = ""
+        while data != "kill":
+            data = conn.recv(1024).decode()
+            conn.send(data.encode())
+            self.textEdit.append(data)
+
+    def client_connect(self):
+        host=str(self.ip.text())
+        port=int(self.port.text())
+        self.connexion = Client.connect(host, port)
 
 
 if __name__ == '__main__':

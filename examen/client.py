@@ -59,8 +59,7 @@ class Client():
 if __name__ == "__main__":
     print(sys.argv)
     if len(sys.argv) < 3:
-        client = Client("127.0.0.1", 8111)
+        client = Client("127.0.0.1", 10000)
 
         client.connect()
         client.dialogue()
-

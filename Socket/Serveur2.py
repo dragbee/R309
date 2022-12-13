@@ -1,22 +1,39 @@
 import socket
 
-def data():
-    server_socket.listen(1)
-    reply = ""  #message serveur
-    data = ""   #message client
-    conn, address = server_socket.accept()
-    while True:
-        data = conn.recv(1024).decode()
-        print("Client : ", data)
-        reply = input("Server : ")
-        print(reply)
-        conn.send(reply.encode())
-        conn.send(data.encode())
-    conn.close()  # fermeture connexion serveur, client
-    server_socket.close()  # fermeture serveur
+def serveur():
+    msg = ""
+    conn = None
+    server_socket = None
+    while msg != "kill" :
+        msg = ""
+        server_socket = socket.socket()
+        server_socket.bind(("0.0.0.0", 8111))
+        server_socket.listen(1)
+        print('Serveur en attente de connexion')
+        while msg != "kill" and msg != "reset":
+            msg = ""
+            try :
+                conn, addr = server_socket.accept()
+                print (addr)
+            except ConnectionError:
+                print ("erreur de connection")
+                break
+            else :
+                while msg != "kill" and msg != "reset" and msg != "disconnect":
+                    msg = conn.recv(1024).decode()
+                    print ("Received from client: ", msg)
+                    # msg = input('Enter a message to send: ')
+                    """ 
+                    le serveur va ici récupere les commandes du client et lui renvoyer. Dans la suite de la SAÉ, 
+                    le serveur fera pareil mais en renvoyant le résultat des commandes demandées par le client.
+                    """
+                    conn.send(msg.encode())
+                conn.close()
+        print ("Connection closed")
+        server_socket.close()
+        print ("Server closed")
 
+# Coder les commande ici
 
 if __name__ == '__main__':
-    server_socket = socket.socket()
-    server_socket.bind(('127.0.0.1', 8111))
-    data()
+    serveur()
