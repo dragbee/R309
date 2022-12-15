@@ -1,6 +1,3 @@
-import socket
-import threading
-
 """
 class server_socket():
 
@@ -61,15 +58,15 @@ import socket, threading, sys
 
 class Client():
     def __init__(self, host, port):
-        self.__host = host
-        self.__port = port
-        self.__sock = socket.socket()
-        self.__thread = None
+        self.host = host
+        self.port = port
+        self.sock = socket.socket()
+        self.thread = None
 
     # fonction de connection.
     def connect(self) -> int:
         try:
-            self.__sock.connect((self.__host, self.__port))
+            self.sock.connect((self.host, self.port))
         except ConnectionRefusedError:
             print("serveur non lancé ou mauvaise information")
             return -1
@@ -88,17 +85,17 @@ class Client():
 
     def dialogue(self):
         msg = ""
-        self.__thread = threading.Thread(target=self.__reception, args=[self.__sock, ])
-        self.__thread.start()
+        self.thread = threading.Thread(target=self.reception, args=[self.sock, ])
+        self.thread.start()
         while msg != "kill" and msg != "disconnect" and msg != "reset":
-            msg = self.__envoi()
-        self.__thread.join()
-        self.__sock.close()
+            msg = self.envoi()
+        self.thread.join()
+        self.sock.close()
 
-    def __envoi(self):
+    def envoi(self):
         msg = input("client: ")
         try:
-            self.__sock.send(msg.encode())
+            self.sock.send(msg.encode())
         except BrokenPipeError:
             print("erreur, socket fermée")
         return msg
@@ -107,7 +104,7 @@ class Client():
       thread recepction, la connection étant passée en argument
     """
 
-    def __reception(self, conn):
+    def reception(self, conn):
         msg = ""
         while msg != "kill" and msg != "disconnect" and msg != "reset":
             msg = conn.recv(1024).decode()
