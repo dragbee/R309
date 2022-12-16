@@ -10,7 +10,7 @@ def data():
     data = ""  # message client
     while data != "kill":
         server_socket = socket.socket()
-        server_socket.bind(('127.0.0.1', 8111))
+        server_socket.bind(('0.0.0.0', 8111))
         server_socket.listen(1)
         print('Serveur en attente de connexion')
         while data != "kill" and data != "reset":
@@ -37,7 +37,7 @@ def data():
 
                 elif data == "RAM" or data == "CPU":
                     if data == "RAM":
-                        ram = f"total : {round(psutil.virtual_memory()[0])} bytes\n available : {psutil.virtual_memory()[1]} bytes\n used : {psutil.virtual_memory().percent} %"
+                        ram = f"total : {round(((psutil.virtual_memory()[0]) / 1000000000),2)} Go\n available : {round(((psutil.virtual_memory()[1]) / 1000000000),2)} Go\n used : {psutil.virtual_memory().percent} %"
                         conn.send(ram.encode())
                     else: #data == "CPU"
                         cpu = f"used (%) : {psutil.cpu_percent()}"
