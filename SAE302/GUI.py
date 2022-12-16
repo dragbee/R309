@@ -201,3 +201,6 @@ if __name__ == '__main__':
     win = TextEditDemo()
     win.show()
     sys.exit(app.exec_())
+   
+   
+   
